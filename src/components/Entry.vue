@@ -18,10 +18,15 @@ export default {
     let btnStart = this.$refs.btnStart
     TweenMax.to(wrapperEntry, 1.5, {backgroundColor:"#000003",
     ease:Linear.easeNone, repeat: 0, onComplete: this.showStart})
-    TweenMax.to(btnStart, 1, {backgroundColor:"#07134a",
-    ease:Linear.easeNone, repeat: 0, delay: 1})
+    TweenMax.to(btnStart, 1, {backgroundColor:"#0c2d4d",
+    ease:Linear.easeNone, repeat: 0, delay: 1, onComplete: this.pulsationBtn})
   },
   methods: {
+    pulsationBtn() {
+      let btnStart = this.$refs.btnStart
+      TweenMax.to(btnStart, 1, {backgroundColor:"#1c5a96",
+      ease:Linear.easeNone, repeat: -1, yoyo: true})
+    },
     startGame() {
       let btnStart = this.$refs.btnStart
       TweenMax.to(btnStart, 1.5,{
@@ -54,9 +59,11 @@ export default {
   margin auto
 .btn-start:hover
   background-color #3093f1 !important
+  color #000003
 .btn-start
   background-color transparent
-  color white
+  // color #7298bd
+  color #939fab
   cursor pointer
   width 60px
   height 60px

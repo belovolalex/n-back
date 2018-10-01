@@ -51,11 +51,11 @@ export default {
 
 <style lang="stylus">
 .dots-light
-  color #3093f1
+  color #939fab
 .dots-blue
   color #01050b
 .wrapper-loading
-  color #3093f1
+  color #939fab
   letter-spacing 1.3px
   text-align center
   padding 10px 50px

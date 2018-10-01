@@ -19,7 +19,7 @@ export default {
 
 <style lang="stylus" scoped>
 p
-  color #b4afaf
+  color #939fab
 .wrapper-info
   padding 0 1.3%
 </style>

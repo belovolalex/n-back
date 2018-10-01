@@ -34,11 +34,11 @@ body
   padding 0
   margin 0
   font-family sans-serif
+  background-color #000003
 #app
   height 100vh
   width 100%
   display flex
-  background-color #000003
 .anim-enter-active, .anim-leave-active
   transition opacity .5s ease
 .anim-enter, .anim-leave-to

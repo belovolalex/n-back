@@ -28,9 +28,26 @@ export const store = new Vuex.Store({
     simileValues: {
       position: [],
       color: []
-    }
+    },
+    playerAnswers: {
+      truePosition: 0,
+      falsePosition: 0,
+      trueColor: 0,
+      falseColor: 0 
+    },
+    disabledBtnColor: true,
+    disabledBtnPosition: true
   },
   getters: {
+    getPlayerAnswers(state) {
+      return state.playerAnswers
+    },
+    getDisabledBtnColor(state) {
+      return state.disabledBtnColor
+    },
+    getDisabledBtnPosition(state) {
+      return state.disabledBtnPosition
+    },
     getCurrentComp(state) {
       return state.currentComp
     },
@@ -63,6 +80,18 @@ export const store = new Vuex.Store({
     },
   },
   mutations: {
+    disabledBtnColor(state) {
+      state.disabledBtnColor = false
+    },
+    disabledBtnPosition(state) {
+      state.disabledBtnPosition = false
+    },
+    freezeBtnColor(state) {
+      state.disabledBtnColor = true
+    },
+    freezeBtnPosition(state) {
+      state.disabledBtnPosition = true
+    },
     setCurrentCompGame(state) {
       state.currentComp = 'game'
     },
@@ -97,7 +126,7 @@ export const store = new Vuex.Store({
     },
     countSteps (state) {
       // return state.numSteps = state.numFieldsRows * 6
-      state.numSteps = 18
+      state.numSteps = 2
     },
     iteration(state, val) {
       if(state.numSteps <= 2) {
@@ -111,11 +140,43 @@ export const store = new Vuex.Store({
     setPrevValues(state) {
       state.prevValues.position = state.positionsArr[state.positionsArr.length - state.level -1]
       state.prevValues.color = state.colorsArr[state.colorsArr.length - state.level - 1]
+    },
+    checkPlayerColor(state) {
+      if(state.activeColor == state.prevValues.color) {
+        state.playerAnswers.trueColor += 1
+      } else {
+        state.playerAnswers.falseColor += 1
+      }
+    },
+    checkPlayerPosition(state) {
+      if(state.activePosition == state.prevValues.position) {
+        state.playerAnswers.truePosition += 1
+      } else {
+        state.playerAnswers.falsePosition += 1
+      }
+    },
+    checkClickBtn(state) {
+      window.addEventListener("keydown", function(e) {
+        if(e.keyCode == 37) {
+          if(!state.disabledBtnPosition) {
+            store.commit('checkPlayerPosition')
+          }
+          state.disabledBtnPosition = true
+        }
+        if(e.keyCode == 39) {
+          if(!state.disabledBtnColor){
+            store.commit('checkPlayerColor')
+          }
+          state.disabledBtnColor = true
+        }
+      })
     }
   },
   actions: {
     startGame(store) {
         setTimeout(()=> {
+          store.commit('disabledBtnColor')
+          store.commit('disabledBtnPosition')
           store.commit('randomNums')
           store.commit('countSteps')
           store.commit('activeColor')
@@ -124,6 +185,9 @@ export const store = new Vuex.Store({
           store.commit('simile')
           
           let interval = setInterval(()=> {
+            store.commit('checkClickBtn')
+            store.commit('disabledBtnColor')
+            store.commit('disabledBtnPosition')
             store.commit('simile')
             store.commit('randomNums')
             store.commit('activeColor')
