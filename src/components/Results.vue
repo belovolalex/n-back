@@ -1,19 +1,13 @@
 <template lang="pug">
   .results
     line-chart
-    p.results__title Results
+    p.results__title Результат
     .results-block
-      p.results__subtitle position: {{ truePosition }}
-      .results-block-results
-        span.span hit: {{ answers.truePosition }}
-        span.span miss: {{ answers.falsePosition }}
+      p.results__subtitle позиция: {{ answers.truePosition }} из {{ truePosition }} 
     .results-block
-      p.results__subtitle color: {{ trueColor }}
-      .results-block-results
-        span.span hit: {{ answers.trueColor }}
-        span.span miss: {{ answers.falseColor }}
+      p.results__subtitle цвет: {{ answers.trueColor }} из {{ trueColor }}
     .results-block
-      p.results__subtitle persentage
+      p.results__subtitle эффективность: {{ efficiency }} %
     .results-block
       button(@click="startGame") continue
     .results-block
@@ -40,6 +34,10 @@ export default {
     },
     truePosition() {
       return this.$store.getters.getTruePosition
+    },
+    efficiency() {
+      return this.$store.getters.getValEfficiency
+      
     }
   },
   methods: {

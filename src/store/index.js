@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
+    valEfficiency: null,
     currentComp: 'entry',
     numFieldsRows: 1,
     widthGame: '',
@@ -17,7 +18,7 @@ export const store = new Vuex.Store({
       integerRow: null,
       integerField: null
     },
-    level: 2,
+    level: 1,
     activePosition: '',
     colorsArr: [],
     positionsArr: [],
@@ -36,21 +37,40 @@ export const store = new Vuex.Store({
       falseColor: 0 
     },
     disabledBtnColor: true,
-    disabledBtnPosition: true
+    disabledBtnPosition: true,
+    clickOnPosition: false,
+    clickOnColor: false
   },
   getters: {
+    getClickOnPosition(state) {
+      return state.clickOnPosition
+    },
+    getClickOnColor(state) {
+      return state.clickOnColor
+    },
+    getValEfficiency(state) {
+      let trueAnswer = state.playerAnswers.truePosition + state.playerAnswers.trueColor - state.playerAnswers.falsePosition - state.playerAnswers.falseColor
+      let countMatches = state.simileValues.color.length + state.simileValues.position.length
+      let procValOneAnswer = (100 / countMatches).toFixed(1)
+      if(trueAnswer) {
+        let efficiency = Math.floor(procValOneAnswer * trueAnswer)
+        return efficiency
+      } else {
+        return 0
+      }
+    },
     getTrueColor(state) {
       if(state.simileValues.color.length >= 1) {
         return state.simileValues.color.length
       } else {
-        return 'w'
+        return '0'
       }
     },
     getTruePosition(state) {
       if(state.simileValues.position.length >= 1) {
         return state.simileValues.position.length
       } else {
-        return 'k'
+        return '0'
       }
     },
     getArrAnswers(state) {
@@ -101,6 +121,12 @@ export const store = new Vuex.Store({
     },
   },
   mutations: {
+    clickOnPosition(state) {
+      state.clickOnPosition = !state.clickOnPosition
+    },
+    clickOnColor(state) {
+      state.clickOnColor = !state.clickOnColor 
+    },
     disabledBtnColor(state) {
       state.disabledBtnColor = false
     },
@@ -147,7 +173,7 @@ export const store = new Vuex.Store({
     },
     countSteps (state) {
       // return state.numSteps = state.numFieldsRows * 6
-      state.numSteps = 4
+      state.numSteps = 9
     },
     iteration(state, val) {
       if(state.numSteps <= 2) {

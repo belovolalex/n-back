@@ -28,7 +28,7 @@ export default {
       setTimeout(()=> {
         this.$store.commit('checkPlayerColor')
         this.$store.commit('freezeBtnColor')
-      }, 0)
+      })
     },
     checkPosition() {
       setTimeout(()=> {
