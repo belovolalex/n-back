@@ -5,7 +5,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     currentComp: 'entry',
-    numFieldsRows: 3,
+    numFieldsRows: 1,
     widthGame: '',
     numSteps: '',
     showField: true,
@@ -17,13 +17,13 @@ export const store = new Vuex.Store({
       integerRow: null,
       integerField: null
     },
-    level: 1,
+    level: 2,
     activePosition: '',
     colorsArr: [],
     positionsArr: [],
     prevValues: {
-      position: '',
-      color: ''
+      position: [],
+      color: []
     },
     simileValues: {
       position: [],
@@ -39,6 +39,27 @@ export const store = new Vuex.Store({
     disabledBtnPosition: true
   },
   getters: {
+    getTrueColor(state) {
+      if(state.simileValues.color.length >= 1) {
+        return state.simileValues.color.length
+      } else {
+        return 'w'
+      }
+    },
+    getTruePosition(state) {
+      if(state.simileValues.position.length >= 1) {
+        return state.simileValues.position.length
+      } else {
+        return 'k'
+      }
+    },
+    getArrAnswers(state) {
+      let arr = []
+      for(var key in state.playerAnswers) {
+        arr.push(state.playerAnswers[key])
+      }
+      return arr
+    },
     getPlayerAnswers(state) {
       return state.playerAnswers
     },
@@ -117,16 +138,16 @@ export const store = new Vuex.Store({
     },
     simile(state) {
       if (state.activePosition == state.prevValues.position) {
-        state.simileValues.position.push(state.prevValues.position)
+        state.simileValues.position.push(state.activePosition)
       }
       if (state.activeColor == state.prevValues.color) {
-        state.simileValues.color.push(state.prevValues.color)
+        state.simileValues.color.push(state.activeColor)
       }
 
     },
     countSteps (state) {
       // return state.numSteps = state.numFieldsRows * 6
-      state.numSteps = 2
+      state.numSteps = 4
     },
     iteration(state, val) {
       if(state.numSteps <= 2) {
@@ -138,8 +159,9 @@ export const store = new Vuex.Store({
       state.activePosition = String(state.randIntegers.integerField) + String(state.randIntegers.integerRow)
     },
     setPrevValues(state) {
-      state.prevValues.position = state.positionsArr[state.positionsArr.length - state.level -1]
-      state.prevValues.color = state.colorsArr[state.colorsArr.length - state.level - 1]
+      // state.prevValues.position = state.positionsArr[state.positionsArr.length - state.level -1]
+      state.prevValues.position = state.positionsArr[state.positionsArr.length -1 - state.level]
+      state.prevValues.color = state.colorsArr[state.colorsArr.length -1 - state.level]
     },
     checkPlayerColor(state) {
       if(state.activeColor == state.prevValues.color) {
@@ -170,6 +192,33 @@ export const store = new Vuex.Store({
           state.disabledBtnColor = true
         }
       })
+    },
+    newSession(state) {
+      state.activeColor = ''
+      state.activePosition = ''
+      state.disabledBtnColor = true
+      state.disabledBtnPosition = true
+      state.currentComp = 'game'
+      state.numSteps = null
+      state.playerAnswers = {
+        truePosition: 0,
+        falsePosition: 0,
+        trueColor: 0,
+        falseColor: 0
+      }
+      state.positionsArr = []
+      state.prevValues = {
+        position: [],
+        color: []
+      }
+      state.randIntegers = {
+        integerField: null,
+        integerRow: null
+      }
+      state.simileValues = {
+        color: [],
+        position: []
+      }
     }
   },
   actions: {
@@ -188,13 +237,13 @@ export const store = new Vuex.Store({
             store.commit('checkClickBtn')
             store.commit('disabledBtnColor')
             store.commit('disabledBtnPosition')
-            store.commit('simile')
             store.commit('randomNums')
             store.commit('activeColor')
             store.commit('changeShowField')
             store.commit('activePosition')
             store.commit('iteration', interval)
             store.commit('setPrevValues')
+            store.commit('simile')
             if(store.getters.getNumStep == 1) {
               setTimeout(()=> {
                 store.commit('setCurrentCompResults')

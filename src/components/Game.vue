@@ -120,5 +120,5 @@ export default {
   width 100%
   max-width 400px
   margin auto
-  background-color #000003
+  // background-color #000003
 </style>

@@ -3,10 +3,14 @@
     button(@click="checkPosition"
           :disabled="disabledBtnPosition"
           :class="{'active-btn': disabledBtnPosition}"
-          ) position
+          )
+      span.control__arrow &#8592; :
+      span position
     button(@click="checkColor"
           :class="{'active-btn': disabledBtnColor}"
-          :disabled="disabledBtnColor") color
+          :disabled="disabledBtnColor")
+      span color
+      span.control__arrow : &#8594;
 </template>
 
 <script>
@@ -21,12 +25,16 @@ export default {
   },
   methods: {
     checkColor() {
-     this.$store.commit('checkPlayerColor')
-     this.$store.commit('freezeBtnColor')
+      setTimeout(()=> {
+        this.$store.commit('checkPlayerColor')
+        this.$store.commit('freezeBtnColor')
+      }, 0)
     },
     checkPosition() {
-     this.$store.commit('checkPlayerPosition')
-     this.$store.commit('freezeBtnPosition')
+      setTimeout(()=> {
+        this.$store.commit('checkPlayerPosition')
+        this.$store.commit('freezeBtnPosition')
+      })
     }
   }
 }
@@ -42,6 +50,10 @@ export default {
   justify-content space-between
   margin 0 auto
   width calc(100% - 3%)
+.control__arrow
+  display none
+  @media (min-width 992px)
+    display inline-block
 .wrapper-control
   @media (min-width 992px)
     button:hover
