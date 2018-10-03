@@ -25,16 +25,12 @@ export default {
   },
   methods: {
     checkColor() {
-      setTimeout(()=> {
         this.$store.commit('checkPlayerColor')
         this.$store.commit('freezeBtnColor')
-      })
     },
     checkPosition() {
-      setTimeout(()=> {
         this.$store.commit('checkPlayerPosition')
         this.$store.commit('freezeBtnPosition')
-      })
     }
   }
 }

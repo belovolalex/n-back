@@ -1,5 +1,5 @@
 <template lang="pug">
-  .results
+  .results(v-if="showChart")
     line-chart
     p.results__title Результат
     .results-block
@@ -12,6 +12,10 @@
       button(@click="startGame") continue
     .results-block
       p session
+  .results(v-else)
+    p В этой игре не было совпадений
+    p Попробуйте еще раз
+    p Играть
 </template>
 
 <script>
@@ -26,6 +30,11 @@ export default {
     }
   },
   computed: {
+    showChart() {
+      if(this.$store.getters.getTruePosition || this.$store.getters.getTrueColor) {
+        return true
+      }
+    },
     answers() {
       return this.$store.getters.getPlayerAnswers
     },
@@ -36,7 +45,11 @@ export default {
       return this.$store.getters.getTruePosition
     },
     efficiency() {
-      return this.$store.getters.getValEfficiency
+      if(this.$store.getters.getValEfficiency > 0) {
+        return this.$store.getters.getValEfficiency
+      } else {
+        return 0
+      }
       
     }
   },
