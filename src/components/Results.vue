@@ -1,21 +1,19 @@
 <template lang="pug">
   .results(v-if="showChart")
     line-chart
-    p.results__title Результат
+    //- p.results__title Результат
+    //- .results-block
+    //-   p.results__subtitle позиция: {{ answers.truePosition }} из {{ truePosition }} 
+    //- .results-block
+    //-   p.results__subtitle цвет: {{ answers.trueColor }} из {{ trueColor }}
     .results-block
-      p.results__subtitle позиция: {{ answers.truePosition }} из {{ truePosition }} 
+      p.results__subtitle Эффективность: {{ efficiency }} %
     .results-block
-      p.results__subtitle цвет: {{ answers.trueColor }} из {{ trueColor }}
-    .results-block
-      p.results__subtitle эффективность: {{ efficiency }} %
-    .results-block
-      button(@click="startGame") continue
-    .results-block
-      p session
+      button(@click="startGame") продолжить
   .results(v-else)
     p В этой игре не было совпадений
     p Попробуйте еще раз
-    p Играть
+    button.start-game(@click="startGame") играть
 </template>
 
 <script>
@@ -50,7 +48,6 @@ export default {
       } else {
         return 0
       }
-      
     }
   },
   methods: {
@@ -62,7 +59,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
   .results
     width 100%
     padding-top 50px
@@ -84,9 +81,20 @@ export default {
     display flex
     margin-left 15%
   button
-    background-color #056e88
+    transition 0.2s
+    background-color #0c2d4d
     color #c1d8f0
     border none
     padding 10px 80px
     letter-spacing 1.3px
+    cursor pointer
+    outline none
+    margin-left 10%
+    border-radius 5px
+  button:hover
+    transition 0.2s
+    background-color #15497b
+  .start-game
+    margin-left 15%
+
 </style>

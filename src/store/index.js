@@ -4,21 +4,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
-    valEfficiency: null,
     currentComp: 'entry',
-    numFieldsRows: 4,
+    numFieldsRows: 1,
     widthGame: '',
-    numSteps: '',
+    numSteps: null,
     showField: true,
     step: 2000,
-    colors: ['crimson', 'greenyellow', 'mediumvioletred', 'coral', 'orange', 'khaki', 'indigo', 'navy', 'darkslategrey'],
-    // colors: ['crimson', 'greenyellow'],
+    colors: ['crimson', 'greenyellow', 'white', 'indigo', 'darkslategrey'],
     activeColor: '',
     randIntegers: {
       integerRow: null,
       integerField: null
     },
-    level: 1,
+    level: Number(1),
     activePosition: '',
     colorsArr: [],
     positionsArr: [],
@@ -38,18 +36,11 @@ export const store = new Vuex.Store({
     },
     disabledBtnColor: true,
     disabledBtnPosition: true,
+    valEfficiency: null
   },
   getters: {
     getValEfficiency(state) {
-      let trueAnswer = state.playerAnswers.truePosition + state.playerAnswers.trueColor - state.playerAnswers.falsePosition - state.playerAnswers.falseColor
-      let countMatches = state.simileValues.color.length + state.simileValues.position.length
-      let procValOneAnswer = (100 / countMatches).toFixed(1)
-      if(trueAnswer) {
-        let efficiency = Math.floor(procValOneAnswer * trueAnswer)
-        return efficiency
-      } else {
-        return 0
-      }
+      return state.valEfficiency
     },
     getTrueColor(state) {
       if(state.simileValues.color.length >= 1) {
@@ -67,7 +58,7 @@ export const store = new Vuex.Store({
     },
     getArrAnswers(state) {
       let arr = []
-      for(var key in state.playerAnswers) {
+      for(let key in state.playerAnswers) {
         arr.push(state.playerAnswers[key])
       }
       return arr
@@ -113,6 +104,33 @@ export const store = new Vuex.Store({
     },
   },
   mutations: {
+    setActiveLevel(state) {
+      if(state.simileValues.position.length || state.simileValues.color.length) {
+        if(state.valEfficiency < 40) {
+          if(state.level <=1) {
+            state.level = 1
+            localStorage.level = parseInt(state.level)
+          } else {
+            state.level = parseInt(state.level) - 1
+            localStorage.level = state.level
+          }
+        }
+        if(state.valEfficiency >= 80) {
+          state.level = parseInt(state.level) + 1
+          localStorage.level = state.level
+        }
+      }
+    },
+    valEfficiency(state) {
+      let trueAnswer = state.playerAnswers.truePosition + state.playerAnswers.trueColor
+      let countAllAnswer = state.playerAnswers.truePosition + state.playerAnswers.falsePosition + state.playerAnswers.trueColor + state.playerAnswers.falseColor
+      if(trueAnswer) {
+        let efficiency = Math.ceil(trueAnswer/countAllAnswer * 100)
+        state.valEfficiency = efficiency
+      } else {
+        state.efficiency = 0
+      }
+    },
     disabledBtnColor(state) {
       state.disabledBtnColor = false
     },
@@ -158,8 +176,8 @@ export const store = new Vuex.Store({
 
     },
     countSteps (state) {
-      // return state.numSteps = state.numFieldsRows * 6
-      state.numSteps = 3
+      // state.numSteps = 22 + state.level * 2
+      state.numSteps = 5
     },
     iteration(state, val) {
       if(state.numSteps <= 2) {
@@ -171,7 +189,6 @@ export const store = new Vuex.Store({
       state.activePosition = String(state.randIntegers.integerField) + String(state.randIntegers.integerRow)
     },
     setPrevValues(state) {
-      // state.prevValues.position = state.positionsArr[state.positionsArr.length - state.level -1]
       state.prevValues.position = state.positionsArr[state.positionsArr.length -1 - state.level]
       state.prevValues.color = state.colorsArr[state.colorsArr.length -1 - state.level]
     },
@@ -217,7 +234,9 @@ export const store = new Vuex.Store({
       state.disabledBtnColor = true
       state.disabledBtnPosition = true
       state.currentComp = 'game'
+      state.colorsArr = []
       state.numSteps = null
+      state.valEfficiency = null
       state.playerAnswers = {
         truePosition: 0,
         falsePosition: 0,
@@ -237,43 +256,67 @@ export const store = new Vuex.Store({
         color: [],
         position: []
       }
+    },
+    checkStorage(state) {
+      // localStorage.clear()
+      console.log('localStorage', localStorage)
+      let date = new Date()
+      let today = date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay()
+      if(!localStorage.date) {
+        localStorage.date = today
+        localStorage.level = 1
+      }
+      else {
+        if(localStorage.date != today) {
+          state.level = 1
+        } else {
+          state.level = localStorage.level
+        }
+      }
+    },
+    setLevel(state) {
+      // console.log('Number(localStorage.level)', Number(localStorage.level))
+      state.level = localStorage.level
     }
   },
   actions: {
     startGame(store) {
-        setTimeout(()=> {
+      setTimeout(()=> {
+        store.commit('checkStorage')
+        store.commit('disabledBtnColor')
+        store.commit('disabledBtnPosition')
+        store.commit('randomNums')
+        store.commit('countSteps')
+        store.commit('activeColor')
+        store.commit('activePosition')
+        store.commit('setPrevValues')
+        store.commit('simile')
+        
+        
+        let interval = setInterval(()=> {
+          store.commit('checkClickBtn')
           store.commit('disabledBtnColor')
           store.commit('disabledBtnPosition')
           store.commit('randomNums')
-          store.commit('countSteps')
           store.commit('activeColor')
+          store.commit('changeShowField')
           store.commit('activePosition')
+          store.commit('iteration', interval)
           store.commit('setPrevValues')
           store.commit('simile')
-          
-          
-          let interval = setInterval(()=> {
-            store.commit('checkClickBtn')
-            store.commit('disabledBtnColor')
-            store.commit('disabledBtnPosition')
-            store.commit('randomNums')
-            store.commit('activeColor')
-            store.commit('changeShowField')
-            store.commit('activePosition')
-            store.commit('iteration', interval)
-            store.commit('setPrevValues')
-            store.commit('simile')
-            if(store.getters.getNumStep == 1) {
-              setTimeout(()=> {
-                store.commit('countWrongs')
-                store.commit('setCurrentCompResults')
-              },2000)
-            }
+          if(store.getters.getNumStep == 1) {
             setTimeout(()=> {
-              store.commit('changeShowField')
-            })
-          }, store.getters.getStep)
-        },2000)    
+              store.commit('countWrongs')
+              store.commit('valEfficiency')
+              store.commit('setActiveLevel')
+              store.commit('setCurrentCompResults')
+            },2000)
+          }
+          setTimeout(()=> {
+            store.commit('changeShowField')
+          })
+        }, store.getters.getStep)
+      },2000)    
     },
 
   }

@@ -1,7 +1,7 @@
 <template lang="pug">
   .wrapper-info
-    p level: {{ level }}
-    p step: {{ step }}
+    p уровень: {{ level }}
+    p шаг: {{ step }}
 </template>
 
 <script>
@@ -18,8 +18,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-p
-  color #939fab
-.wrapper-info
-  padding 0 1.3%
+p {
+  color: #939fab
+}
+
+.wrapper-info {
+  padding: 0 1.3%
+}
 </style>

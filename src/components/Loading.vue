@@ -1,6 +1,6 @@
 <template lang="pug">
   .wrapper-loading(ref="wrapperStart")
-    p loading 
+    p загрузка 
       span(ref="dots") . . .
 </template>
 
@@ -10,7 +10,8 @@ import {TweenMax, CSSRulePlugin} from 'gsap/TweenMax'
 export default {
   mounted () {
     let wrapperStart = this.$refs.wrapperStart
-    TweenMax.to(wrapperStart, 1.7,
+    // TweenMax.to(wrapperStart, 1.7,
+    TweenMax.to(wrapperStart, .7,
     {opacity: 1,
     delay: 0.5,
     ease: Power1.easeNone, repeat: 0, onComplete: this.loading})
@@ -18,7 +19,8 @@ export default {
   methods: {
     loading() {
       let dots = this.$refs.dots
-      TweenMax.to(dots, 2, {
+      // TweenMax.to(dots, 2, {
+      TweenMax.to(dots, .2, {
         text: {
           value: ". . .",
           oldClass:"dots-blue",
@@ -33,7 +35,8 @@ export default {
     },
     hideLoading() {
       let wrapperStart = this.$refs.wrapperStart
-      TweenMax.to(wrapperStart, 1,
+      // TweenMax.to(wrapperStart, 1,
+      TweenMax.to(wrapperStart, .1,
       {
         opacity: 0,
         delay: 1.5,

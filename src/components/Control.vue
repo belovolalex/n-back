@@ -1,15 +1,18 @@
 <template lang="pug">
   .wrapper-control
-    button(@click="checkPosition"
-          :disabled="disabledBtnPosition"
-          :class="{'active-btn': disabledBtnPosition}"
-          )
+    button(
+      @click="checkPosition"
+      :disabled="disabledBtnPosition"
+      :class="{'active-btn': disabledBtnPosition}"
+    )
       span.control__arrow &#8592; :
-      span position
-    button(@click="checkColor"
-          :class="{'active-btn': disabledBtnColor}"
-          :disabled="disabledBtnColor")
-      span color
+      span позиция
+    button(
+      @click="checkColor"
+      :class="{'active-btn': disabledBtnColor}"
+      :disabled="disabledBtnColor"
+    )
+      span цвет
       span.control__arrow : &#8594;
 </template>
 
@@ -25,27 +28,27 @@ export default {
   },
   methods: {
     checkColor() {
-        this.$store.commit('checkPlayerColor')
-        this.$store.commit('freezeBtnColor')
+      this.$store.commit('checkPlayerColor')
+      this.$store.commit('freezeBtnColor')
     },
     checkPosition() {
-        this.$store.commit('checkPlayerPosition')
-        this.$store.commit('freezeBtnPosition')
+      this.$store.commit('checkPlayerPosition')
+      this.$store.commit('freezeBtnPosition')
     }
   }
 }
 </script>
 
 <style lang="stylus">
-.active-btn
-  // background-color #0f3962
-  transition 0.2s
-  background-color #0c2d4d !important
 .wrapper-control
   display flex
   justify-content space-between
   margin 0 auto
   width calc(100% - 3%)
+  .active-btn
+    transition 0.2s
+    background-color #0c2d4d
+
 .control__arrow
   display none
   @media (min-width 992px)
@@ -57,6 +60,7 @@ export default {
       transition background-color 0.1s
       color #57aafc
   button
+    border-radius 5px
     font-weight bold
     cursor pointer
     width 48%
@@ -64,7 +68,6 @@ export default {
     outline none
     padding 15px 0
     background-color #1a6cba
-    // background-color blue
     transition background-color 0.2s
     color #a4c8eb
     letter-spacing 1.3px

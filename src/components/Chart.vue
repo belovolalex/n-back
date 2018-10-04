@@ -6,7 +6,7 @@ export default {
   extends: Doughnut,
   mounted () {
     this.renderChart({
-      labels: ['hit positions', 'miss positions', 'hit colors', 'miss colors'],
+      labels: ['правильные позиции', 'ошибочные позиции', 'правильные цвета', 'ошибочные цвета'],
       datasets: [
         {
           label: 'Results',

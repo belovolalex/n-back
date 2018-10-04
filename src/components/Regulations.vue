@@ -1,5 +1,25 @@
 <template lang="pug">
-  p regulations
+  .wrapper-regulations
+    p Правила
+    p Суть игры заключается в непрерывном запоминании последовательности зрительных символов.
+      | Необходимо отмечать соответствие текущего символа символу, представленнному n-шагов назад.
+      | Отсюда и название — n-back.
+      | Для примера рассмотрим последовательность поочерёдно выводимых цифр:
+    .numbers 1 4 6 4 1 6 3
+    p Для выполнения упражнения 2-back, необходимо указывать на совпадения текущего символа с символом,
+      | указанным 2 позиции назад (совпадения отмечены жирным написанием):
+    .numbers 1 
+      span 4 
+      | 6 
+      span 4 
+      | 1 6 3
+    p Указать на совпадение, в данном примере, необходимо в момент появления второй цифры 4.
+      | Для выполнения упражнения 4-back, соответственно:
+    .numbers
+      span 1 
+      | 4 6 4 
+      span 1 
+      | 6 3
 </template>
 
 <script>
@@ -8,6 +28,18 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="stylus" scoped>
+.wrapper-regulations
+  padding 10px
+p
+  color #586f86
+  line-height 1.4
+.numbers
+  padding 10px
+  background-color #d7dadb
+  display inline-block
+  color #214e64
+  span
+    color #050708
+    font-weight bold
 </style>

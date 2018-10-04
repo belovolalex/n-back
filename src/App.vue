@@ -24,6 +24,9 @@ export default {
     currentComp() {
       return this.$store.getters.getCurrentComp
     }
+  },
+  mounted() {
+    this.$store.commit('setLevel')
   }
 }
 </script>

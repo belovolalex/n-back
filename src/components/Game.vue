@@ -111,6 +111,7 @@ export default {
   width 90%
   height 90%
   margin auto
+  border-radius 5px
 
 .fade-enter-active, .fade-leave-active
   transition opacity .6s ease
@@ -120,5 +121,4 @@ export default {
   width 100%
   max-width 400px
   margin auto
-  // background-color #000003
 </style>
