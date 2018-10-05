@@ -14,20 +14,32 @@
       height="80%"
       transition="nice-modal-fade"
     )
-      span.close-popup(@click="hide") &#x274C;
+      span.close-popup(@click="hideRules") &#x274C;
       regulations
+    modal(
+      name="statistics"
+      :adaptive="true"
+      :max-width="1000"
+      :max-height="500"
+      width="90%"
+      height="80%"
+      transition="nice-modal-fade"
+    )
+      span.close-popup(@click="hideStatistics") &#x274C;
+      statistics
     .rules
-      p(@click="show") правила
-      p статистика
-      p настройки
+      p(@click="showRules") правила
+      p(@click="showStatistics") статистика
 </template>
 
 <script>
-import Regulations from './Regulations'
 import {TweenMax, CSSRulePlugin} from 'gsap/TweenMax'
+import Regulations from './Regulations'
+import Statistics from './Statistics'
 export default {
   components: {
-    Regulations
+    Regulations,
+    Statistics
   },
   data() {
     return {
@@ -43,11 +55,17 @@ export default {
     ease:Linear.easeNone, repeat: 0, delay: 1, onComplete: this.pulsationBtn})
   },
   methods: {
-    show() {
+    showRules() {
       this.$modal.show('regulations')
     },
-    hide(){
+    hideRules(){
       this.$modal.hide('regulations')
+    },
+    showStatistics() {
+      this.$modal.show('statistics')
+    },
+    hideStatistics() {
+      this.$modal.hide('statistics')
     },
     pulsationBtn() {
       let btnStart = this.$refs.btnStart
@@ -125,6 +143,8 @@ export default {
   top 0
   font-size 14px
   cursor pointer
-.aaa-enter-active, .aaa-leave-active
-  transition 2s
+.v--modal-box.v--modal
+  padding 10px
+  box-shadow none
+  background-color #eaeef1
 </style>

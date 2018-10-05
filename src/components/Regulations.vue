@@ -29,8 +29,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.wrapper-regulations
-  padding 10px
 p
   color #586f86
   line-height 1.4

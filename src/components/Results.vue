@@ -1,19 +1,21 @@
 <template lang="pug">
   .results(v-if="showChart")
-    line-chart
-    //- p.results__title Результат
-    //- .results-block
-    //-   p.results__subtitle позиция: {{ answers.truePosition }} из {{ truePosition }} 
-    //- .results-block
-    //-   p.results__subtitle цвет: {{ answers.trueColor }} из {{ trueColor }}
+    line-chart(
+      :width="300"
+      :height="300"
+    )
     .results-block
       p.results__subtitle Эффективность: {{ efficiency }} %
     .results-block
       button(@click="startGame") продолжить
+    .results-block
+      button(@click="goToEntry") на гавную
   .results(v-else)
     p В этой игре не было совпадений
     p Попробуйте еще раз
-    button.start-game(@click="startGame") играть
+    button.btn(@click="startGame") играть
+    button.btn(@click="goToEntry") на гавную
+
 </template>
 
 <script>
@@ -53,6 +55,11 @@ export default {
   methods: {
     startGame() {
       this.$store.commit('newSession')
+    },
+    goToEntry() {
+      this.$store.commit('newSession')
+      this.$store.commit('setCurrentCompEntry')
+
     }
   }
   
@@ -65,7 +72,7 @@ export default {
     padding-top 50px
   p
     color #939fab
-    margin-left 15%
+    margin-left 10%
   .results__title
     margin-left 10%
     margin-bottom 25px
@@ -81,20 +88,24 @@ export default {
     display flex
     margin-left 15%
   button
+    @media(max-width 400px)
+      margin-left auto
+      margin-right auto
+      width 90%
+    margin-bottom 20px
+    display block
+    width 300px
+    margin-left 10%
     transition 0.2s
     background-color #0c2d4d
     color #c1d8f0
     border none
-    padding 10px 80px
+    padding 10px
     letter-spacing 1.3px
-    cursor pointer
     outline none
-    margin-left 10%
     border-radius 5px
+    cursor pointer
   button:hover
     transition 0.2s
     background-color #15497b
-  .start-game
-    margin-left 15%
-
 </style>

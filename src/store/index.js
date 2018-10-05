@@ -5,7 +5,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     currentComp: 'entry',
-    numFieldsRows: 1,
+    numFieldsRows: 3,
     widthGame: '',
     numSteps: null,
     showField: true,
@@ -36,7 +36,8 @@ export const store = new Vuex.Store({
     },
     disabledBtnColor: true,
     disabledBtnPosition: true,
-    valEfficiency: null
+    valEfficiency: null,
+    arrStatistics: []
   },
   getters: {
     getValEfficiency(state) {
@@ -102,10 +103,20 @@ export const store = new Vuex.Store({
     activeField(state) {
       return state.randIntegers.integerField
     },
+    showStatistic(state) {
+      return state.arrStatistics
+    }
   },
   mutations: {
     setActiveLevel(state) {
       if(state.simileValues.position.length || state.simileValues.color.length) {
+        if(!state.valEfficiency) {
+          state.valEfficiency = 0
+        }
+        let newStatistic = state.level + '/' + state.valEfficiency
+        state.arrStatistics.push(newStatistic)
+        let str = JSON.stringify(state.arrStatistics)
+        localStorage.setItem('statistic', str)
         if(state.valEfficiency < 40) {
           if(state.level <=1) {
             state.level = 1
@@ -143,6 +154,9 @@ export const store = new Vuex.Store({
     freezeBtnPosition(state) {
       state.disabledBtnPosition = true
     },
+    setCurrentCompEntry(state) {
+      state.currentComp = 'entry'
+    },
     setCurrentCompGame(state) {
       state.currentComp = 'game'
     },
@@ -176,8 +190,7 @@ export const store = new Vuex.Store({
 
     },
     countSteps (state) {
-      // state.numSteps = 22 + state.level * 2
-      state.numSteps = 5
+      state.numSteps = 22 + state.level * 2
     },
     iteration(state, val) {
       if(state.numSteps <= 2) {
@@ -257,32 +270,27 @@ export const store = new Vuex.Store({
         position: []
       }
     },
-    checkStorage(state) {
+    initialization(state) {
       // localStorage.clear()
-      console.log('localStorage', localStorage)
       let date = new Date()
       let today = date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay()
-      if(!localStorage.date) {
-        localStorage.date = today
-        localStorage.level = 1
-      }
-      else {
-        if(localStorage.date != today) {
-          state.level = 1
-        } else {
+      if(!localStorage.date || localStorage.date != today) {
+          state.arrStatistics = []
+          localStorage.date = today
+          localStorage.level = 1
           state.level = localStorage.level
-        }
+      } else {
+        state.level = localStorage.level
+      }
+      let statisticFromStorage =  JSON.parse(localStorage.getItem('statistic'))
+      if(statisticFromStorage) {
+        state.arrStatistics = statisticFromStorage
       }
     },
-    setLevel(state) {
-      // console.log('Number(localStorage.level)', Number(localStorage.level))
-      state.level = localStorage.level
-    }
   },
   actions: {
     startGame(store) {
       setTimeout(()=> {
-        store.commit('checkStorage')
         store.commit('disabledBtnColor')
         store.commit('disabledBtnPosition')
         store.commit('randomNums')
@@ -291,7 +299,6 @@ export const store = new Vuex.Store({
         store.commit('activePosition')
         store.commit('setPrevValues')
         store.commit('simile')
-        
         
         let interval = setInterval(()=> {
           store.commit('checkClickBtn')

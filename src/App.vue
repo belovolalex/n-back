@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('setLevel')
+    this.$store.commit('initialization')
   }
 }
 </script>
@@ -43,7 +43,7 @@ body
   width 100%
   display flex
 .anim-enter-active, .anim-leave-active
-  transition opacity .5s ease
+  transition opacity 1s ease
 .anim-enter, .anim-leave-to
   opacity 0
 </style>
